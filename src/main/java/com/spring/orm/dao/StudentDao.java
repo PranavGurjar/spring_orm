@@ -33,6 +33,7 @@ public class StudentDao {
     }
 
     //deleting the data
+    @Transactional(readOnly = false)
     public void deleteStudent(int studentId) {
     	Student student = this.hibernateTemplate.get(Student.class, studentId);
     	this.hibernateTemplate.delete(student);

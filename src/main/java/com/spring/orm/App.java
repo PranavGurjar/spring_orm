@@ -2,6 +2,7 @@ package com.spring.orm;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -43,85 +44,107 @@ public class App
 
                 switch (input) {
                     case 1:
-                        System.out.println("Enter Student Name: ");
-                        String name = br.readLine();
-
-                        System.out.println("Enter Student City: ");
-                        String city = br.readLine();
-
-                        Student newStudent = new Student();
-                        newStudent.setStudentName(name);
-                        newStudent.setStudentCity(city);
-
-                        int studentId = studentDao.insert(newStudent);
-                        System.out.println("Student added successfully with ID: " + studentId);
+                    	//Add New Student
+                    	
+                    	System.out.println("Enter user id : ");
+                    	int uId = Integer.parseInt(br.readLine());
+                    	
+                    	System.out.println("Enter user name : ");
+                    	String uName = br.readLine();
+                    	
+                    	System.out.println("Enter user city : ");
+                    	String uCity = br.readLine();
+                    	
+                    	Student student = new Student();
+                    	student.setStudentId(uId);
+                    	student.setStudentName(uName);
+                    	student.setStudentCity(uCity);
+                    	
+                    	int r = studentDao.insert(student);
+                    	System.out.println(r+" student added. ");
+                    	
+                    	System.out.println("*****************************************************************");
+                    	System.out.println();
+                    	
                         break;
 
                     case 2:
-                        System.out.println("Fetching all students...");
-                        studentDao.getAllStudents().forEach(System.out::println);
+                    	//Display All Students
+                    	
+                    	System.out.println("*****************************************************************");
+                    	List<Student> allStudents = studentDao.getAllStudents();
+                    	
+                    	for (Student st : allStudents) {
+							System.out.println("Id : "+st.getStudentId());
+							System.out.println("Name : "+st.getStudentName());
+							System.out.println("City : "+st.getStudentCity());
+							System.out.println("-------------------------------------------------------------");
+						}
+                    	
+                    	System.out.println("*****************************************************************");
                         break;
 
                     case 3:
-                        System.out.println("Enter Student ID: ");
-                        int id = Integer.parseInt(br.readLine());
+                    	//Get Single Student Details
 
-                        Student student = studentDao.getStudent(id);
-                        if (student != null) {
-                            System.out.println(student);
-                        } else {
-                            System.out.println("Student not found with ID: " + id);
-                        }
+                    	System.out.println("Enter user id : ");
+                    	int userId = Integer.parseInt(br.readLine());
+                    	
+                    	Student stud = studentDao.getStudent(userId);
+						System.out.println("Id : "+stud.getStudentId());
+						System.out.println("Name : "+stud.getStudentName());
+						System.out.println("City : "+stud.getStudentCity());
+						System.out.println("-------------------------------------------------------------");
+                    	
+                        
                         break;
 
                     case 4:
-                        System.out.println("Enter Student ID to delete: ");
-                        int deleteId = Integer.parseInt(br.readLine());
+                    	//Delete Student
 
-                        studentDao.deleteStudent(deleteId);
-                        System.out.println("Student deleted successfully!");
+                    	System.out.println("Enter user id : ");
+                        int userID = Integer.parseInt(br.readLine());
+                    	studentDao.deleteStudent(userID);
+                    	System.out.println("Student deleted...");
+                    	
                         break;
 
                     case 5:
-                        System.out.println("Enter Student ID to update: ");
-                        int updateId = Integer.parseInt(br.readLine());
-
-                        Student existingStudent = studentDao.getStudent(updateId);
-                        if (existingStudent == null) {
-                            System.out.println("Student not found!");
-                            break;
-                        }
-
-                        System.out.println("Enter new Name (Press Enter to keep current): ");
-                        String newName = br.readLine();
-                        if (!newName.isEmpty()) {
-                            existingStudent.setStudentName(newName);
-                        }
-
-                        System.out.println("Enter new City (Press Enter to keep current): ");
-                        String newCity = br.readLine();
-                        if (!newCity.isEmpty()) {
-                            existingStudent.setStudentCity(newCity);
-                        }
-
-                        studentDao.updateStudent(existingStudent);
+                    	//Update Student
+                    	
+                    	System.out.println("Enter user id to update: ");
+                    	int updateId = Integer.parseInt(br.readLine());
+                    	
+                    	
+                    	Student st = studentDao.getStudent(updateId);
+                    	
+                    	System.out.println("Enter user name to update: ");
+                    	String usName = br.readLine();
+                    	st.setStudentName(usName);
+                    	
+                    	System.out.println("Enter user city to update: ");
+                    	String usCity = br.readLine();
+                    	st.setStudentCity(usCity);
+                    	
+                    	studentDao.updateStudent(st);
                         System.out.println("Student updated successfully!");
+                    	System.out.println("*****************************************************************");
+                    	System.out.println();
+                    	
                         break;
 
                     case 6:
+                    	//Exit
                         go = false;
                         break;
-
+                        
                     default:
-                        System.out.println("Invalid choice! Please try again.");
-                        break;
+                    	System.out.println("Invalid Input!!");
                 }
-
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number format. Please enter a valid number.");
+                
             } catch (Exception e) {
-                System.out.println("An error occurred: " + e.getMessage());
-                e.printStackTrace();
+            	System.out.println("Invalid input try with another one !!");
+            	System.out.println(e.getMessage());
             }
         }
         System.out.println("Thank You for using my application!");
